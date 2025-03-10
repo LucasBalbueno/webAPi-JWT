@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using UserJWT.Controller;
 using UserJWT.DataAccess;
+using UserJWT.Services.AuthService;
+using UserJWT.Services.PasswordService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,12 +11,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IAuthInterface, AuthService>();
+builder.Services.AddScoped<IPasswordInterface, PasswordService>();
+
 // Injeção de dependências com as configurações do banco de dados
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
     var connectionString = builder.Configuration.GetConnectionString("MySqlConnection");
     option.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
+
 
 var app = builder.Build();
 

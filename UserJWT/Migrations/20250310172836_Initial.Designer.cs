@@ -12,7 +12,7 @@ using UserJWT.DataAccess;
 namespace UserJWT.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250310135704_Initial")]
+    [Migration("20250310172836_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
