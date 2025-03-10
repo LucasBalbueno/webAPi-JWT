@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Injeção de dependências com as configurações do banco de dados
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
     var connectionString = builder.Configuration.GetConnectionString("MySqlConnection");
