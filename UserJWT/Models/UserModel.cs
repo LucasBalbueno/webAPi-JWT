@@ -14,6 +14,8 @@ public class UserModel
     
     public byte[] PasswordHash { get; set; }
     
+    public byte[] PasswordSalt { get; set; }
+    
     public RoleEnum Role { get; set; }
     
     public DateTime TokenDataCreation { get; set; } = DateTime.Now;

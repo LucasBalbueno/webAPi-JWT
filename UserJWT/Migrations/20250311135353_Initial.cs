@@ -26,6 +26,7 @@ namespace UserJWT.Migrations
                     Email = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PasswordHash = table.Column<byte[]>(type: "longblob", nullable: false),
+                    PasswordSalt = table.Column<byte[]>(type: "longblob", nullable: false),
                     Role = table.Column<int>(type: "int", nullable: false),
                     TokenDataCreation = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },

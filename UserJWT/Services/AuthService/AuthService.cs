@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using UserJWT.DataAccess;
 using UserJWT.DTOs;
 using UserJWT.Models;
@@ -15,10 +16,48 @@ public class AuthService : IAuthInterface
         _context = context;
         _passwordInteface = passwordInterface;
     }
-    
-    public async Task<Response<RegisterDTO>> Register(RegisterDTO userRegister)
+
+    public async Task<Response<string>> Login(LoginDto userlogin)
     {
-        Response<RegisterDTO> responseService = new Response<RegisterDTO>();
+        Response<string> responseService = new Response<string>();
+
+        try
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(userDb => userDb.Email == userlogin.Email);
+
+            if (user == null)
+            {
+                responseService.Message = "Credenciais inválidas!";
+                responseService.Status = false;
+                return responseService;
+            }
+
+            if (!_passwordInteface.VerifyPasswordHash(userlogin.Password, user.PasswordHash, user.PasswordSalt))
+            {
+                responseService.Message = "Credenciais inválidas!";
+                responseService.Status = false;
+                return responseService;
+            }
+
+            var token = _passwordInteface.CreateTokenJwt(user);
+
+            responseService.Message = "Usuário logado com sucesso";
+            responseService.Dados = token;
+
+        }
+        catch (Exception ex)
+        {
+            responseService.Dados = null;
+            responseService.Message = ex.Message;
+            responseService.Status = false;
+        }
+        
+        return responseService;
+    }
+    
+    public async Task<Response<RegisterDto>> Register(RegisterDto userRegister)
+    {
+        Response<RegisterDto> responseService = new Response<RegisterDto>();
 
         try
         {
@@ -30,7 +69,7 @@ public class AuthService : IAuthInterface
                 return responseService;
             }
             
-            _passwordInteface.CreatePasswordHash(userRegister.Password, out byte[] passwordHash);
+            _passwordInteface.CreatePasswordHash(userRegister.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             UserModel user = new UserModel()
             {
@@ -38,7 +77,8 @@ public class AuthService : IAuthInterface
                 UserName = userRegister.UserName,
                 Email = userRegister.Email,
                 Role = userRegister.Role,
-                PasswordHash = passwordHash
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt
             };
 
             _context.Add(user);
@@ -56,7 +96,7 @@ public class AuthService : IAuthInterface
         return responseService;
     }
 
-    private bool VerificationUserAndEmailisExist(RegisterDTO userRegister)
+    private bool VerificationUserAndEmailisExist(RegisterDto userRegister)
     {
         var user = _context.Users.FirstOrDefault(userDb =>
             userDb.Email == userRegister.Email || userDb.UserName == userRegister.UserName);

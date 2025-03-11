@@ -3,7 +3,7 @@ using UserJWT.Enum;
 
 namespace UserJWT.DTOs;
 
-public class RegisterDTO
+public class RegisterDto
 {
     
     //Validações não estão funcionando

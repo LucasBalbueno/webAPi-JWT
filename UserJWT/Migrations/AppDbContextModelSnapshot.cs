@@ -40,6 +40,10 @@ namespace UserJWT.Migrations
                         .IsRequired()
                         .HasColumnType("longblob");
 
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("longblob");
+
                     b.Property<int>("Role")
                         .HasColumnType("int");
 

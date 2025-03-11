@@ -12,7 +12,7 @@ using UserJWT.DataAccess;
 namespace UserJWT.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250310172836_Initial")]
+    [Migration("20250311135353_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -40,6 +40,10 @@ namespace UserJWT.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("longblob");
+
+                    b.Property<byte[]>("PasswordSalt")
                         .IsRequired()
                         .HasColumnType("longblob");
 

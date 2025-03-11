@@ -10,8 +10,14 @@ public static class UserController
     
     public static void AddUserController(this WebApplication app)
     {
+        app.MapPost("login", async ([FromServices] IAuthInterface authInterface, LoginDto userLogin) =>
+        {
+            var response = await authInterface.Login(userLogin);
+
+            return Results.Ok(response);
+        });
         
-        app.MapPost("register", async ([FromServices] IAuthInterface authInterface, RegisterDTO userRegister) =>
+        app.MapPost("register", async ([FromServices] IAuthInterface authInterface, RegisterDto userRegister) =>
         {
             var response = await authInterface.Register(userRegister);
 
