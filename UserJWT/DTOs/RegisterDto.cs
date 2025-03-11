@@ -5,9 +5,6 @@ namespace UserJWT.DTOs;
 
 public class RegisterDto
 {
-    
-    //Validações não estão funcionando
-    
     public string Name { get; set; }
     
     public string UserName { get; set; }

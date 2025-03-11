@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using UserJWT.DTOs;
+using UserJWT.Models;
 using UserJWT.Services.AuthService;
 
 namespace UserJWT.Controller;
@@ -23,5 +24,16 @@ public static class UserController
 
             return Results.Ok(response);
         });
+        
+        //Controller Test
+        app.MapGet("user", () =>
+            {
+                Response<string> response = new Response<string>();
+                response.Message = "Acessei!";
+
+                return Results.Ok(response);
+            })
+            .RequireAuthorization()
+            .Produces<Response<string>>(StatusCodes.Status200OK);
     }
 }
